@@ -19,13 +19,13 @@ BUILD_MODE = $(DEBUG_MODE)
 AUTO_RUN = $(FALSE)
 
 # Flags for two build modes
-Release_FLAGS = -O3 -std=c++17 -s -DNDEBUG
-Debug_FLAGS = -O0 -std=c++17 -g -Wall
+Release_FLAGS = -O3 -std=c++17 -l sqlite3 -s -DNDEBUG
+Debug_FLAGS = -c -O0 -std=c++17 -l sqlite3 -g -Wall 
 
 # EXECUTABLE - main filename
 # SOURCES - returns list of all .cpp files
 EXECUTABLE = main
-SOURCES = $(shell find ./include -name '*.cpp')
+SOURCES = $(shell find ./include -name '*.cpp && find ./include -name '*.c')
 
 # TEST - filename for testing
 TEST = tests
@@ -40,7 +40,8 @@ endif
 # Build project
 build:
 	@mkdir -p $(BUILD_MODE)
-	$(CXX) $($(BUILD_MODE)_FLAGS) $(EXECUTABLE).cpp $(SOURCES) -o $(BUILD_MODE)/$(EXECUTABLE)
+#	$(CXX) $($(BUILD_MODE)_FLAGS) $(EXECUTABLE).cpp $(SOURCES) -o $(BUILD_MODE)/$(EXECUTABLE)
+	$(CXX) $(EXECUTABLE).cpp -l sqlite3 $(SOURCES) -o $(BUILD_MODE)/$(EXECUTABLE)
 	@echo "makefile: \033[;32mBuild have done!\033[0m"
 
 # Run program after build
