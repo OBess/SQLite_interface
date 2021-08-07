@@ -1,10 +1,8 @@
 #pragma once
 
 // C++
-#include <iostream>
 #include <string>
 #include <utility>
-#include <thread>
 #include <mutex>
 
 // sqlite3
@@ -71,14 +69,22 @@ public:
       swap(*this, fake);
    }
 
-   bool SQLexec(const std::string &code) noexcept
+   int SQLexec(const std::string &code) noexcept
    {
       std::unique_lock<std::mutex> lock(m_mutex);
-      return sqlite3_exec(m_db, code.c_str(), 0, 0, &m_msg);
+      m_code = sqlite3_exec(m_db, code.c_str(), 0, 0, &m_msg);
+      return m_code;
+   }
+
+   int SQLexec(const std::string &code, int(*func)(void*, int, char**, char**)) noexcept
+   {
+      std::unique_lock<std::mutex> lock(m_mutex);
+      m_code = sqlite3_exec(m_db, code.c_str(), func, 0, &m_msg);
+      return m_code;
    }
 
    // Status of DataBase
-   bool getCode() const
+   int getCode() const
    {
       return m_code;
    }
