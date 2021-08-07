@@ -5,5 +5,9 @@ Release
 Test
 
 runTests
+main
 
 first.db
+sqlite
+sqlite3.o
+apiTest
