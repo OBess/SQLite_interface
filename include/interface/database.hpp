@@ -17,12 +17,12 @@
 class IDataBase
 {
 public:
-   // m_open DataBase
+   // m_code DataBase
    IDataBase(const std::string &path) noexcept
        : m_path(path)
    {
-      m_open = sqlite3_open(m_path.c_str(), &m_db);
-      if (m_open)
+      m_code = sqlite3_open(m_path.c_str(), &m_db);
+      if (m_code)
          sqlite3_errmsg(m_db);
    }
 
@@ -61,7 +61,7 @@ public:
    {
       sqlite3_free(m_msg);
       sqlite3_close(m_db);
-      m_open = false;
+      m_code = false;
    }
 
    // Close DataBase
@@ -78,9 +78,9 @@ public:
    }
 
    // Status of DataBase
-   bool isOpen() const
+   bool getCode() const
    {
-      return m_open;
+      return m_code;
    }
 
    // Get msg from the work of database
@@ -93,14 +93,14 @@ public:
    {
       std::swap(m_db1.m_db, m_db2.m_db);
       std::swap(m_db1.m_msg, m_db2.m_msg);
-      std::swap(m_db1.m_open, m_db2.m_open);
+      std::swap(m_db1.m_code, m_db2.m_code);
    }
 
 private:
    sqlite3 *m_db = nullptr;
    char *m_msg = nullptr;
 
-   bool m_open = false;
+   int m_code = false;
    std::string m_path{};
 
    std::mutex m_mutex;
