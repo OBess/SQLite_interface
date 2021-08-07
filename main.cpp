@@ -1,31 +1,19 @@
 // C++
 #include <iostream>
 
-// SQLite
-#include <cstdio>
-#include "include/sqlite/sqlite3.h"
+// Custom
+#include "include/interface/database.hpp"
 
-const char *SQL = "CREATE TABLE IF NOT EXISTS foo(a,b,c); INSERT INTO FOO VALUES(1,2,3); INSERT INTO FOO SELECT * FROM FOO;";
-
-int main(int argc, char **argv)
+int main()
 {
-   sqlite3 *db = 0; // хэндл объекта соединение к БД
-   char *err = 0;
+   const std::string path = "first.db";
 
-   // открываем соединение
-   if (sqlite3_open("my_cosy_database.dblite", &db))
-      fprintf(stderr, "Ошибка открытия/создания БД: %s\n", sqlite3_errmsg(db));
-   // выполняем SQL
-   else if (sqlite3_exec(db, SQL, 0, 0, &err))
-   {
-      fprintf(stderr, "Ошибка SQL: %sn", err);
-      sqlite3_free(err);
-   }
+   IDataBase database(path);
+   if (database.isOpen())
+      std::cout << "DataBase [ " << path << " ] is open!" << std::endl;
 
-   std::cout << "Hello world" << std::endl;
-
-   // закрываем соединение
-   sqlite3_close(db);
+   std::string SQL{"CREATE TABLE IF NOT EXISTS foo(a,b,c); INSERT INTO FOO VALUES(1,2,3); INSERT INTO FOO SELECT * FROM FOO;"};
+   database.SQLexec(SQL);
 
    return EXIT_SUCCESS;
 }
