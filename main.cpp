@@ -3,7 +3,7 @@
 
 // SQLite
 #include <cstdio>
-#include "include/sqlite3.h"
+#include "include/sqlite/sqlite3.h"
 
 const char *SQL = "CREATE TABLE IF NOT EXISTS foo(a,b,c); INSERT INTO FOO VALUES(1,2,3); INSERT INTO FOO SELECT * FROM FOO;";
 
@@ -21,6 +21,9 @@ int main(int argc, char **argv)
       fprintf(stderr, "Ошибка SQL: %sn", err);
       sqlite3_free(err);
    }
+
+   std::cout << "Hello world" << std::endl;
+
    // закрываем соединение
    sqlite3_close(db);
 
