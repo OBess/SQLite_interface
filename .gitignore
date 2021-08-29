@@ -11,3 +11,4 @@ first.db
 sqlite
 sqlite3.o
 apiTest
+dbuild
