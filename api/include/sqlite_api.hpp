@@ -8,10 +8,14 @@
 
 // sqlite3
 #include <cstdio>
+#include <iostream>
 #include "sqlite3.h"
 
 // Usings
 using mat_string = std::vector<std::vector<std::string>>;
+
+// Defines
+#define CALLBACK(f) int (*f)(void *, int, char **, char **)
 
 // Interface of sqlite3
 class SQLiteAdapter final
@@ -43,9 +47,13 @@ public:
    // Close DataBase
    void close(const std::string &path) noexcept;
 
-   int exec(const std::string &query, int (*func)(void *, int, char **, char **) = nullptr) noexcept;
+   int exec(const std::string &query, CALLBACK(func) = nullptr) noexcept;
+
+   int exec(const std::string &query, const mat_string &args) noexcept;
 
    mat_string select(const std::string &query) noexcept;
+
+   mat_string getTableData() noexcept;
 
    friend void swap(SQLiteAdapter &m_db1, SQLiteAdapter &m_db2) noexcept;
 
