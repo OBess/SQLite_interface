@@ -1,19 +1,26 @@
 // C++
 #include <iostream>
+#include <filesystem>
 
 // Custom
-#include "include/interface/database.hpp"
+#include "sqlite_api.hpp"
+
+// Usings
+namespace fs = std::filesystem;
 
 int callback(void *NotUsed, int argc, char **argv, char **azColName);
 
 int main()
 {
-   const std::string path = "Students.db";
+   static const std::string path{"log"};
+   fs::create_directory(path);
+
+   static const std::string file{path + "/Students.db"};
    std::string SQL{};
 
-   IDataBase database(path);
+   SQLiteAdapter database(file);
    if (!database.getCode())
-      std::cout << "DataBase [ " << path << " ] is open!" << std::endl;
+      std::cout << "DataBase [ " << file << " ] is open!" << std::endl;
 
    SQL = "CREATE TABLE Students(Id INTEGER PRIMARY KEY, Surname TEXT, Name TEXT, Arrange REAL);"
          "INSERT INTO Students(Surname, Name, Arrange) VALUES ('Surn1', 'Tom', 2.3);"
